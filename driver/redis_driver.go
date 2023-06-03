@@ -8,8 +8,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ivanlebron/dcron/dlog"
+	"github.com/google/uuid"
 	"github.com/redis/go-redis/v9"
+
+	"github.com/ivanlebron/dcron"
 )
 
 const (
@@ -21,7 +23,7 @@ type RedisDriver struct {
 	serviceName string
 	nodeID      string
 	timeout     time.Duration
-	logger      dlog.Logger
+	logger      dcron.Logger
 	started     bool
 
 	// this context is used to define
@@ -35,7 +37,7 @@ type RedisDriver struct {
 func newRedisDriver(redisClient *redis.Client) *RedisDriver {
 	rd := &RedisDriver{
 		c: redisClient,
-		logger: &dlog.StdLogger{
+		logger: &dcron.StdLogger{
 			Log: log.Default(),
 		},
 		timeout: redisDefaultTimeout,
@@ -142,4 +144,15 @@ func (rd *RedisDriver) withOption(opt Option) (err error) {
 		}
 	}
 	return
+}
+
+// GlobalKeyPrefix is global redis key preifx
+const GlobalKeyPrefix = "distributed-cron:"
+
+func GetKeyPre(serviceName string) string {
+	return GlobalKeyPrefix + serviceName + ":"
+}
+
+func GetNodeId(serviceName string) string {
+	return GetKeyPre(serviceName) + uuid.New().String()
 }

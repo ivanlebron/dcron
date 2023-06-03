@@ -3,7 +3,7 @@ package driver
 import (
 	"time"
 
-	"github.com/ivanlebron/dcron/dlog"
+	"github.com/ivanlebron/dcron"
 )
 
 const (
@@ -20,7 +20,7 @@ type TimeoutOption struct{ timeout time.Duration }
 func (to TimeoutOption) Type() int                         { return OptionTypeTimeout }
 func NewTimeoutOption(timeout time.Duration) TimeoutOption { return TimeoutOption{timeout: timeout} }
 
-type LoggerOption struct{ logger dlog.Logger }
+type LoggerOption struct{ logger dcron.Logger }
 
-func (to LoggerOption) Type() int                     { return OptionTypeLogger }
-func NewLoggerOption(logger dlog.Logger) LoggerOption { return LoggerOption{logger: logger} }
+func (to LoggerOption) Type() int                      { return OptionTypeLogger }
+func NewLoggerOption(logger dcron.Logger) LoggerOption { return LoggerOption{logger: logger} }

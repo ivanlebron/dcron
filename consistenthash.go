@@ -1,4 +1,4 @@
-package consistenthash
+package dcron
 
 /*
 Copyright 2013 Google Inc.

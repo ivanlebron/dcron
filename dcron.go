@@ -9,9 +9,9 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/ivanlebron/dcron/dlog"
-	"github.com/ivanlebron/dcron/driver"
 	"github.com/robfig/cron/v3"
+
+	"github.com/ivanlebron/dcron/driver"
 )
 
 const (
@@ -35,7 +35,7 @@ type Dcron struct {
 	nodePool   INodePool
 	running    int32
 
-	logger  dlog.Logger
+	logger  Logger
 	logInfo bool
 
 	nodeUpdateDuration time.Duration
@@ -73,7 +73,7 @@ func NewDcronWithOption(serverName string, driver driver.Driver, dcronOpts ...Op
 func newDcron(serverName string) *Dcron {
 	return &Dcron{
 		ServerName: serverName,
-		logger: &dlog.StdLogger{
+		logger: &StdLogger{
 			Log: log.New(os.Stdout, "[dcron] ", log.LstdFlags),
 		},
 		jobs:               make(map[string]*JobWarpper),
@@ -84,12 +84,12 @@ func newDcron(serverName string) *Dcron {
 }
 
 // SetLogger set dcron logger
-func (d *Dcron) SetLogger(logger dlog.Logger) {
+func (d *Dcron) SetLogger(logger Logger) {
 	d.logger = logger
 }
 
 // GetLogger get dcron logger
-func (d *Dcron) GetLogger() dlog.Logger {
+func (d *Dcron) GetLogger() Logger {
 	return d.logger
 }
 

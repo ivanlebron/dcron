@@ -23,7 +23,3 @@ type Driver interface {
 func NewRedisDriver(redisClient *redis.Client) Driver {
 	return newRedisDriver(redisClient)
 }
-
-func NewRedisZSetDriver(redisClient *redis.Client) Driver {
-	return newRedisZSetDriver(redisClient)
-}

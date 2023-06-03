@@ -3,7 +3,6 @@ package dcron
 import (
 	"time"
 
-	"github.com/ivanlebron/dcron/dlog"
 	"github.com/robfig/cron/v3"
 )
 
@@ -11,7 +10,7 @@ import (
 type Option func(*Dcron)
 
 // WithLogger both set dcron and cron logger.
-func WithLogger(logger dlog.Logger) Option {
+func WithLogger(logger Logger) Option {
 	return func(dcron *Dcron) {
 		//set dcron logger
 		dcron.logger = logger

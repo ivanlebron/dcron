@@ -6,8 +6,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ivanlebron/dcron/consistenthash"
-	"github.com/ivanlebron/dcron/dlog"
 	"github.com/ivanlebron/dcron/driver"
 )
 
@@ -17,25 +15,25 @@ type NodePool struct {
 	nodeID      string
 
 	rwMut sync.RWMutex
-	nodes *consistenthash.Map
+	nodes *Map
 
 	driver         driver.Driver
 	hashReplicas   int
-	hashFn         consistenthash.Hash
+	hashFn         Hash
 	updateDuration time.Duration
 
-	logger   dlog.Logger
+	logger   Logger
 	stopChan chan int
 	preNodes []string // sorted
 }
 
-func NewNodePool(serviceName string, drv driver.Driver, updateDuration time.Duration, hashReplicas int, logger dlog.Logger) INodePool {
+func NewNodePool(serviceName string, drv driver.Driver, updateDuration time.Duration, hashReplicas int, logger Logger) INodePool {
 	np := &NodePool{
 		serviceName:    serviceName,
 		driver:         drv,
 		hashReplicas:   hashReplicas,
 		updateDuration: updateDuration,
-		logger: &dlog.StdLogger{
+		logger: &StdLogger{
 			Log: log.Default(),
 		},
 		stopChan: make(chan int, 1),
@@ -121,7 +119,7 @@ func (np *NodePool) updateHashRing(nodes []string) {
 	np.logger.Infof("update hashRing nodes=%+v", nodes)
 	np.preNodes = make([]string, len(nodes))
 	copy(np.preNodes, nodes)
-	np.nodes = consistenthash.New(np.hashReplicas, np.hashFn)
+	np.nodes = New(np.hashReplicas, np.hashFn)
 	for _, v := range nodes {
 		np.nodes.Add(v)
 	}
