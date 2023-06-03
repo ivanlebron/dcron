@@ -1,9 +1,5 @@
 package logger
 
-import (
-	"testing"
-)
-
 type PrintfLogger interface {
 	Printf(string, ...interface{})
 }
@@ -45,14 +41,4 @@ type PrintfLoggerFromLogfLogger struct {
 
 func (l *PrintfLoggerFromLogfLogger) Printf(fmt string, args ...interface{}) {
 	l.Log.Logf(fmt, args)
-}
-
-func NewPrintfLoggerFromLogfLogger(logger LogfLogger) PrintfLogger {
-	return &PrintfLoggerFromLogfLogger{Log: logger}
-}
-
-func NewLoggerForTest(t *testing.T) Logger {
-	return &StdLogger{
-		Log: NewPrintfLoggerFromLogfLogger(t),
-	}
 }
