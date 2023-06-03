@@ -2,11 +2,11 @@ package dcron
 
 import (
 	"context"
-	"log"
 	"sync"
 	"time"
 
 	"github.com/ivanlebron/dcron/driver"
+	"github.com/ivanlebron/dcron/logger"
 )
 
 // NodePool is a node pool
@@ -22,21 +22,18 @@ type NodePool struct {
 	hashFn         Hash
 	updateDuration time.Duration
 
-	logger   Logger
+	logger   logger.Logger
 	stopChan chan int
 	preNodes []string // sorted
 }
 
-func NewNodePool(serviceName string, drv driver.Driver, updateDuration time.Duration, hashReplicas int, logger Logger) INodePool {
+func NewNodePool(serviceName string, drv driver.Driver, updateDuration time.Duration, hashReplicas int, logger logger.Logger) INodePool {
 	np := &NodePool{
 		serviceName:    serviceName,
 		driver:         drv,
 		hashReplicas:   hashReplicas,
 		updateDuration: updateDuration,
-		logger: &StdLogger{
-			Log: log.Default(),
-		},
-		stopChan: make(chan int, 1),
+		stopChan:       make(chan int, 1),
 	}
 	if logger != nil {
 		np.logger = logger

@@ -1,4 +1,4 @@
-package dcron
+package logger
 
 import (
 	"testing"

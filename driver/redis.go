@@ -11,7 +11,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/redis/go-redis/v9"
 
-	"github.com/ivanlebron/dcron"
+	"github.com/ivanlebron/dcron/logger"
 )
 
 const (
@@ -23,7 +23,7 @@ type RedisDriver struct {
 	serviceName string
 	nodeID      string
 	timeout     time.Duration
-	logger      dcron.Logger
+	logger      logger.Logger
 	started     bool
 
 	// this context is used to define
@@ -37,7 +37,7 @@ type RedisDriver struct {
 func newRedisDriver(redisClient *redis.Client) *RedisDriver {
 	rd := &RedisDriver{
 		c: redisClient,
-		logger: &dcron.StdLogger{
+		logger: &logger.StdLogger{
 			Log: log.Default(),
 		},
 		timeout: redisDefaultTimeout,

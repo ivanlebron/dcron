@@ -3,8 +3,8 @@ package dcron
 import (
 	"context"
 	"errors"
+	"io"
 	"log"
-	"os"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -12,6 +12,7 @@ import (
 	"github.com/robfig/cron/v3"
 
 	"github.com/ivanlebron/dcron/driver"
+	"github.com/ivanlebron/dcron/logger"
 )
 
 const (
@@ -35,7 +36,7 @@ type Dcron struct {
 	nodePool   INodePool
 	running    int32
 
-	logger  Logger
+	logger  logger.Logger
 	logInfo bool
 
 	nodeUpdateDuration time.Duration
@@ -73,8 +74,8 @@ func NewDcronWithOption(serverName string, driver driver.Driver, dcronOpts ...Op
 func newDcron(serverName string) *Dcron {
 	return &Dcron{
 		ServerName: serverName,
-		logger: &StdLogger{
-			Log: log.New(os.Stdout, "[dcron] ", log.LstdFlags),
+		logger: &logger.StdLogger{
+			Log: log.New(io.Discard, "[dcron] ", log.LstdFlags),
 		},
 		jobs:               make(map[string]*JobWarpper),
 		crOptions:          make([]cron.Option, 0),
@@ -84,12 +85,12 @@ func newDcron(serverName string) *Dcron {
 }
 
 // SetLogger set dcron logger
-func (d *Dcron) SetLogger(logger Logger) {
+func (d *Dcron) SetLogger(logger logger.Logger) {
 	d.logger = logger
 }
 
 // GetLogger get dcron logger
-func (d *Dcron) GetLogger() Logger {
+func (d *Dcron) GetLogger() logger.Logger {
 	return d.logger
 }
 
